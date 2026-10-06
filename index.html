@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,41 +59,47 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwKtla_Sv2EJim70wQD3TzHiMrG_TPanIDUgZHpsZBVVjTqVuCZ3yDj4b0yCPImY3S3/exec';
 
-    fetch(API_URL)
-      .then(response => response.json())
-      .then(dados => {
+    // Esta função será chamada pelo Apps Script
+    function receberVersiculo(dados) {
 
-        if (dados.sucesso) {
-
-          document.getElementById('versiculo').textContent =
-            '“' + dados.versiculo + '”';
-
-          document.getElementById('referencia').textContent =
-            dados.referencia;
-
-        } else {
-
-          document.getElementById('versiculo').textContent =
-            dados.versiculo;
-
-          document.getElementById('referencia').textContent = '';
-
-        }
-
-      })
-      .catch(erro => {
+      if (dados.sucesso) {
 
         document.getElementById('versiculo').textContent =
-          'Não foi possível carregar o versículo.';
+          '“' + dados.versiculo + '”';
+
+        document.getElementById('referencia').textContent =
+          dados.referencia;
+
+      } else {
+
+        document.getElementById('versiculo').textContent =
+          dados.versiculo;
 
         document.getElementById('referencia').textContent = '';
 
-        console.error(erro);
+      }
+    }
 
-      });
+    // URL do seu Apps Script
+    const API_URL =
+      'https://script.google.com/macros/s/AKfycbwKtla_Sv2EJim70wQD3TzHiMrG_TPanIDUgZHpsZBVVjTqVuCZ3yDj4b0yCPImY3S3/exec'
+      + '?callback=receberVersiculo';
+
+    // Cria dinamicamente uma chamada JSONP
+    const script = document.createElement('script');
+
+    script.src = API_URL;
+
+    script.onerror = function() {
+      document.getElementById('versiculo').textContent =
+        'Não foi possível carregar o versículo.';
+    };
+
+    document.body.appendChild(script);
+
   </script>
 
 </body>
+
 </html>
