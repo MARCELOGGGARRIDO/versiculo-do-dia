@@ -8,47 +8,107 @@
   <title>Versículo do Dia</title>
 
   <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 30px;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: white;
+      padding: 20px;
+      font-family: Georgia, "Times New Roman", serif;
+      background: transparent;
+      color: #333333;
     }
 
-    .container {
-      max-width: 800px;
+    .versiculo-container {
+      width: 100%;
+      max-width: 900px;
       margin: 0 auto;
+      text-align: center;
+      padding: 20px 25px 25px;
     }
 
-    h1 {
-      font-size: 24px;
+    .titulo {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #666666;
+      margin-bottom: 14px;
+    }
+
+    .linha {
+      width: 55px;
+      height: 2px;
+      background: #777777;
+      margin: 0 auto 25px;
     }
 
     .versiculo {
-      font-size: 28px;
-      line-height: 1.5;
-      margin-top: 30px;
+      font-size: 26px;
+      line-height: 1.55;
+      font-weight: normal;
+      color: #333333;
+      margin: 0 auto;
     }
 
     .referencia {
-      font-size: 20px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 17px;
       font-weight: bold;
-      margin-top: 20px;
+      margin-top: 22px;
+      color: #555555;
     }
 
     .erro {
-      font-size: 18px;
-      color: #990000;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      color: #777777;
     }
+
+    @media (max-width: 600px) {
+
+      body {
+        padding: 10px;
+      }
+
+      .versiculo-container {
+        padding: 15px 10px 20px;
+      }
+
+      .titulo {
+        font-size: 13px;
+        letter-spacing: 1.5px;
+      }
+
+      .linha {
+        margin-bottom: 20px;
+      }
+
+      .versiculo {
+        font-size: 21px;
+        line-height: 1.5;
+      }
+
+      .referencia {
+        font-size: 15px;
+        margin-top: 18px;
+      }
+    }
+
   </style>
 </head>
 
 <body>
 
-  <div class="container">
+  <div class="versiculo-container">
 
-    <h1>VERSÍCULO DO DIA</h1>
+    <div class="titulo">
+      VERSÍCULO DO DIA
+    </div>
+
+    <div class="linha"></div>
 
     <div id="versiculo" class="versiculo">
       Carregando...
@@ -60,7 +120,6 @@
 
   <script>
 
-    // Esta função será chamada pelo Apps Script
     function receberVersiculo(dados) {
 
       if (dados.sucesso) {
@@ -81,19 +140,21 @@
       }
     }
 
-    // URL do seu Apps Script
     const API_URL =
       'https://script.google.com/macros/s/AKfycbwKtla_Sv2EJim70wQD3TzHiMrG_TPanIDUgZHpsZBVVjTqVuCZ3yDj4b0yCPImY3S3/exec'
       + '?callback=receberVersiculo';
 
-    // Cria dinamicamente uma chamada JSONP
     const script = document.createElement('script');
 
     script.src = API_URL;
 
     script.onerror = function() {
+
       document.getElementById('versiculo').textContent =
         'Não foi possível carregar o versículo.';
+
+      document.getElementById('referencia').textContent = '';
+
     };
 
     document.body.appendChild(script);
