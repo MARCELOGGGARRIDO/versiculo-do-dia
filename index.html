@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Versículo do Dia</title>
 
   <style>
-
     body {
       margin: 0;
       padding: 30px;
@@ -44,9 +40,7 @@
       font-size: 18px;
       color: #990000;
     }
-
   </style>
-
 </head>
 
 <body>
@@ -63,16 +57,11 @@
 
   </div>
 
-
   <script>
-
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxrso-TJgPM5usl0HOPwUArfEwroB-kmS4e0JzQo4wXFzSHuNjEEI6ujKl8SCtH707S/exec';
-
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwKtla_Sv2EJim70wQD3TzHiMrG_TPanIDUgZHpsZBVVjTqVuCZ3yDj4b0yCPImY3S3/exec';
 
     fetch(API_URL)
-
       .then(response => response.json())
-
       .then(dados => {
 
         if (dados.sucesso) {
@@ -88,27 +77,22 @@
           document.getElementById('versiculo').textContent =
             dados.versiculo;
 
-          document.getElementById('referencia').textContent =
-            '';
+          document.getElementById('referencia').textContent = '';
 
         }
 
       })
-
       .catch(erro => {
 
         document.getElementById('versiculo').textContent =
           'Não foi possível carregar o versículo.';
 
-        document.getElementById('referencia').textContent =
-          '';
+        document.getElementById('referencia').textContent = '';
 
         console.error(erro);
 
       });
-
   </script>
 
 </body>
-
 </html>
