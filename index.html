@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -45,6 +46,16 @@
       margin: 0 auto 25px;
     }
 
+    .imagem {
+      display: none;
+      width: 100%;
+      max-width: 800px;
+      max-height: 420px;
+      object-fit: cover;
+      margin: 0 auto 28px;
+      border-radius: 8px;
+    }
+
     .versiculo {
       font-size: 26px;
       line-height: 1.55;
@@ -86,6 +97,12 @@
         margin-bottom: 20px;
       }
 
+      .imagem {
+        max-height: 300px;
+        margin-bottom: 22px;
+        border-radius: 6px;
+      }
+
       .versiculo {
         font-size: 21px;
         line-height: 1.5;
@@ -110,6 +127,12 @@
 
     <div class="linha"></div>
 
+    <img
+      id="imagem"
+      class="imagem"
+      alt="Imagem do versículo"
+    >
+
     <div id="versiculo" class="versiculo">
       Carregando...
     </div>
@@ -120,33 +143,83 @@
 
   <script>
 
+    function obterIdGoogleDrive(url) {
+
+      if (!url) {
+        return null;
+      }
+
+      let resultado = url.match(/\/file\/d\/([^/]+)/);
+
+      if (resultado) {
+        return resultado[1];
+      }
+
+      resultado = url.match(/[?&]id=([^&]+)/);
+
+      if (resultado) {
+        return resultado[1];
+      }
+
+      return null;
+    }
+
+
     function receberVersiculo(dados) {
+
+      const versiculo = document.getElementById('versiculo');
+      const referencia = document.getElementById('referencia');
+      const imagem = document.getElementById('imagem');
 
       if (dados.sucesso) {
 
-        document.getElementById('versiculo').textContent =
+        versiculo.textContent =
           '“' + dados.versiculo + '”';
 
-        document.getElementById('referencia').textContent =
+        referencia.textContent =
           dados.referencia;
+
+
+        if (dados.imagem) {
+
+          const idArquivo =
+            obterIdGoogleDrive(dados.imagem);
+
+          if (idArquivo) {
+
+            imagem.src =
+              'https://drive.google.com/thumbnail?id='
+              + idArquivo
+              + '&sz=w1600';
+
+            imagem.style.display = 'block';
+
+          }
+
+        }
 
       } else {
 
-        document.getElementById('versiculo').textContent =
+        versiculo.textContent =
           dados.versiculo;
 
-        document.getElementById('referencia').textContent = '';
+        referencia.textContent = '';
+
+        imagem.style.display = 'none';
 
       }
     }
+
 
     const API_URL =
       'https://script.google.com/macros/s/AKfycbwKtla_Sv2EJim70wQD3TzHiMrG_TPanIDUgZHpsZBVVjTqVuCZ3yDj4b0yCPImY3S3/exec'
       + '?callback=receberVersiculo';
 
+
     const script = document.createElement('script');
 
     script.src = API_URL;
+
 
     script.onerror = function() {
 
@@ -155,7 +228,10 @@
 
       document.getElementById('referencia').textContent = '';
 
+      document.getElementById('imagem').style.display = 'none';
+
     };
+
 
     document.body.appendChild(script);
 
@@ -164,3 +240,4 @@
 </body>
 
 </html>
+```
