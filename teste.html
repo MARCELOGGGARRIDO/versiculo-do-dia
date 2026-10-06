@@ -2,46 +2,329 @@
 <html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Teste</title>
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Mensagem do Dia</title>
 
   <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 30px;
-      font-family: Arial, sans-serif;
+      padding: 20px;
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      background: transparent;
+
+      color: #333333;
+    }
+
+    .container {
+
+      width: 100%;
+
+      max-width: 900px;
+
+      margin: 0 auto;
+
+      padding: 20px 25px 25px;
+
       text-align: center;
     }
 
-    #resultado {
-      font-size: 24px;
+    .imagem {
+
+      display: none;
+
+      width: 100%;
+
+      max-width: 420px;
+
+      aspect-ratio: 1 / 1;
+
+      object-fit: contain;
+
+      margin: 0 auto 28px;
+
+      border-radius: 8px;
     }
+
+    .versiculo {
+
+      font-size: 26px;
+
+      line-height: 1.55;
+
+      color: #333333;
+    }
+
+    .referencia {
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      font-size: 17px;
+
+      font-weight: bold;
+
+      margin-top: 22px;
+
+      color: #555555;
+    }
+
+    .erro {
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      font-size: 16px;
+
+      color: #777777;
+    }
+
+    @media (max-width: 600px) {
+
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 15px 10px 20px;
+      }
+
+      .imagem {
+        max-width: 320px;
+      }
+
+      .versiculo {
+        font-size: 21px;
+        line-height: 1.5;
+      }
+
+      .referencia {
+        font-size: 15px;
+      }
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <div id="resultado">
-    Identificando...
+  <div class="container">
+
+    <img
+      id="imagem"
+      class="imagem"
+      alt="Imagem da mensagem">
+
+    <div
+      id="versiculo"
+      class="versiculo">
+
+      Carregando...
+
+    </div>
+
+    <div
+      id="referencia"
+      class="referencia">
+    </div>
+
   </div>
+
 
   <script>
 
-    const parametros = new URLSearchParams(window.location.search);
+    /*
+     * 1. Obtém a data enviada pela URL
+     *
+     * Exemplo:
+     *
+     * ?data=20261006
+     */
 
-    const data = parametros.get('data');
+    const parametros =
+      new URLSearchParams(window.location.search);
 
-    if (data) {
+    const data =
+      parametros.get('data');
 
-      document.getElementById('resultado').innerHTML =
-        'Data recebida: <strong>' + data + '</strong>';
+
+    /*
+     * 2. Elementos da página
+     */
+
+    const versiculo =
+      document.getElementById('versiculo');
+
+    const referencia =
+      document.getElementById('referencia');
+
+    const imagem =
+      document.getElementById('imagem');
+
+
+    /*
+     * 3. URL do Apps Script
+     *
+     * COLOQUE AQUI A MESMA URL /exec
+     * QUE JÁ ESTÁ FUNCIONANDO.
+     */
+
+    const API_URL =
+      'COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT';
+
+
+    /*
+     * 4. Converte o link do Google Drive
+     * em uma imagem exibível.
+     */
+
+    function obterIdGoogleDrive(url) {
+
+      if (!url) {
+        return null;
+      }
+
+      let resultado =
+        url.match(/\/file\/d\/([^/]+)/);
+
+      if (resultado) {
+        return resultado[1];
+      }
+
+      resultado =
+        url.match(/[?&]id=([^&]+)/);
+
+      if (resultado) {
+        return resultado[1];
+      }
+
+      return null;
+    }
+
+
+    /*
+     * 5. Recebe os dados do Apps Script
+     */
+
+    function receberVersiculo(dados) {
+
+      if (dados.sucesso) {
+
+        versiculo.textContent =
+          '“' + dados.versiculo + '”';
+
+        referencia.textContent =
+          dados.referencia;
+
+
+        if (dados.imagem) {
+
+          const idArquivo =
+            obterIdGoogleDrive(dados.imagem);
+
+          if (idArquivo) {
+
+            imagem.src =
+              'https://drive.google.com/thumbnail?id='
+              + idArquivo
+              + '&sz=w1000';
+
+            imagem.style.display =
+              'block';
+          }
+
+        }
+
+      } else {
+
+        versiculo.textContent =
+          dados.versiculo;
+
+        referencia.textContent = '';
+
+        imagem.style.display =
+          'none';
+      }
+
+    }
+
+
+    /*
+     * 6. Verifica se recebemos uma data
+     */
+
+    if (!data) {
+
+      versiculo.textContent =
+        'Nenhuma data foi informada.';
+
+      referencia.textContent = '';
 
     } else {
 
-      document.getElementById('resultado').innerHTML =
-        'Nenhuma data recebida.';
+
+      /*
+       * 7. Converte 20261006 para 06/10/2026
+       */
+
+      if (!/^\d{8}$/.test(data)) {
+
+        versiculo.textContent =
+          'Data inválida.';
+
+      } else {
+
+        const dataFormatada =
+          data.substring(6, 8)
+          + '/'
+          + data.substring(4, 6)
+          + '/'
+          + data.substring(0, 4);
+
+
+        /*
+         * 8. Chama o Apps Script
+         */
+
+        const script =
+          document.createElement('script');
+
+
+        script.src =
+          API_URL
+          + '?data='
+          + encodeURIComponent(dataFormatada)
+          + '&callback=receberVersiculo';
+
+
+        script.onerror =
+          function() {
+
+            versiculo.textContent =
+              'Não foi possível carregar a mensagem.';
+
+            referencia.textContent = '';
+
+            imagem.style.display =
+              'none';
+          };
+
+
+        document.body.appendChild(script);
+
+      }
 
     }
 
