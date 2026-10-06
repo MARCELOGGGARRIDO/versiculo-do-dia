@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Teste</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 30px;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    #resultado {
+      font-size: 24px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="resultado">
+    Identificando...
+  </div>
+
+  <script>
+
+    const parametros = new URLSearchParams(window.location.search);
+
+    const data = parametros.get('data');
+
+    if (data) {
+
+      document.getElementById('resultado').innerHTML =
+        'Data recebida: <strong>' + data + '</strong>';
+
+    } else {
+
+      document.getElementById('resultado').innerHTML =
+        'Nenhuma data recebida.';
+
+    }
+
+  </script>
+
+</body>
+
+</html>
