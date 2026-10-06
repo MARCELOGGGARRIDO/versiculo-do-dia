@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Versículo do Dia</title>
 
   <style>
+
     body {
       margin: 0;
       padding: 30px;
@@ -35,7 +39,14 @@
       font-weight: bold;
       margin-top: 20px;
     }
+
+    .erro {
+      font-size: 18px;
+      color: #990000;
+    }
+
   </style>
+
 </head>
 
 <body>
@@ -44,15 +55,60 @@
 
     <h1>VERSÍCULO DO DIA</h1>
 
-    <div class="versiculo">
-      “Porque Deus amou o mundo de tal maneira...”
+    <div id="versiculo" class="versiculo">
+      Carregando...
     </div>
 
-    <div class="referencia">
-      João 3:16
-    </div>
+    <div id="referencia" class="referencia"></div>
 
   </div>
 
+
+  <script>
+
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxrso-TJgPM5usl0HOPwUArfEwroB-kmS4e0JzQo4wXFzSHuNjEEI6ujKl8SCtH707S/exec';
+
+
+    fetch(API_URL)
+
+      .then(response => response.json())
+
+      .then(dados => {
+
+        if (dados.sucesso) {
+
+          document.getElementById('versiculo').textContent =
+            '“' + dados.versiculo + '”';
+
+          document.getElementById('referencia').textContent =
+            dados.referencia;
+
+        } else {
+
+          document.getElementById('versiculo').textContent =
+            dados.versiculo;
+
+          document.getElementById('referencia').textContent =
+            '';
+
+        }
+
+      })
+
+      .catch(erro => {
+
+        document.getElementById('versiculo').textContent =
+          'Não foi possível carregar o versículo.';
+
+        document.getElementById('referencia').textContent =
+          '';
+
+        console.error(erro);
+
+      });
+
+  </script>
+
 </body>
+
 </html>
