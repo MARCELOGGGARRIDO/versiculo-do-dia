@@ -1,5 +1,5 @@
-```html
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -49,9 +49,9 @@
     .imagem {
       display: none;
       width: 100%;
-      max-width: 800px;
-      max-height: 420px;
-      object-fit: cover;
+      max-width: 420px;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
       margin: 0 auto 28px;
       border-radius: 8px;
     }
@@ -70,12 +70,6 @@
       font-weight: bold;
       margin-top: 22px;
       color: #555555;
-    }
-
-    .erro {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 16px;
-      color: #777777;
     }
 
     @media (max-width: 600px) {
@@ -98,7 +92,7 @@
       }
 
       .imagem {
-        max-height: 300px;
+        max-width: 320px;
         margin-bottom: 22px;
         border-radius: 6px;
       }
@@ -115,29 +109,31 @@
     }
 
   </style>
+
 </head>
 
 <body>
 
   <div class="versiculo-container">
 
-    <div class="titulo">
-      VERSÍCULO DO DIA
-    </div>
+```
+<div class="titulo">
+  VERSÍCULO DO DIA
+</div>
 
-    <div class="linha"></div>
+<div class="linha"></div>
 
-    <img
-      id="imagem"
-      class="imagem"
-      alt="Imagem do versículo"
-    >
+<img
+  id="imagem"
+  class="imagem"
+  alt="Imagem do versículo">
 
-    <div id="versiculo" class="versiculo">
-      Carregando...
-    </div>
+<div id="versiculo" class="versiculo">
+  Carregando...
+</div>
 
-    <div id="referencia" class="referencia"></div>
+<div id="referencia" class="referencia"></div>
+```
 
   </div>
 
@@ -164,7 +160,6 @@
       return null;
     }
 
-
     function receberVersiculo(dados) {
 
       const versiculo = document.getElementById('versiculo');
@@ -179,7 +174,6 @@
         referencia.textContent =
           dados.referencia;
 
-
         if (dados.imagem) {
 
           const idArquivo =
@@ -190,12 +184,10 @@
             imagem.src =
               'https://drive.google.com/thumbnail?id='
               + idArquivo
-              + '&sz=w1600';
+              + '&sz=w1000';
 
             imagem.style.display = 'block';
-
           }
-
         }
 
       } else {
@@ -206,20 +198,16 @@
         referencia.textContent = '';
 
         imagem.style.display = 'none';
-
       }
     }
 
-
     const API_URL =
-      'https://script.google.com/macros/s/AKfycbwKtla_Sv2EJim70wQD3TzHiMrG_TPanIDUgZHpsZBVVjTqVuCZ3yDj4b0yCPImY3S3/exec'
+      'COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT'
       + '?callback=receberVersiculo';
-
 
     const script = document.createElement('script');
 
     script.src = API_URL;
-
 
     script.onerror = function() {
 
@@ -229,9 +217,7 @@
       document.getElementById('referencia').textContent = '';
 
       document.getElementById('imagem').style.display = 'none';
-
     };
-
 
     document.body.appendChild(script);
 
@@ -240,4 +226,3 @@
 </body>
 
 </html>
-```
