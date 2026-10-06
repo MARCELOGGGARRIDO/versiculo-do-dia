@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Teste 2</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 25px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      word-break: break-all;
+    }
+
+    h2 {
+      word-break: normal;
+    }
+
+    .item {
+      margin-bottom: 15px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .titulo {
+      font-weight: bold;
+      margin-bottom: 5px;
+      word-break: normal;
+    }
+
+    .valor {
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Teste de identificação da página</h2>
+
+  <div class="item">
+    <div class="titulo">window.location.href</div>
+    <div class="valor" id="href"></div>
+  </div>
+
+  <div class="item">
+    <div class="titulo">window.location.pathname</div>
+    <div class="valor" id="pathname"></div>
+  </div>
+
+  <div class="item">
+    <div class="titulo">window.location.search</div>
+    <div class="valor" id="search"></div>
+  </div>
+
+  <div class="item">
+    <div class="titulo">document.referrer</div>
+    <div class="valor" id="referrer"></div>
+  </div>
+
+  <div class="item">
+    <div class="titulo">window.location.ancestorOrigins</div>
+    <div class="valor" id="ancestors"></div>
+  </div>
+
+  <div class="item">
+    <div class="titulo">window.top === window</div>
+    <div class="valor" id="top"></div>
+  </div>
+
+  <div class="item">
+    <div class="titulo">window.parent === window</div>
+    <div class="valor" id="parent"></div>
+  </div>
+
+  <script>
+
+    document.getElementById('href').textContent =
+      window.location.href || '(vazio)';
+
+    document.getElementById('pathname').textContent =
+      window.location.pathname || '(vazio)';
+
+    document.getElementById('search').textContent =
+      window.location.search || '(vazio)';
+
+    document.getElementById('referrer').textContent =
+      document.referrer || '(vazio)';
+
+    let origens = [];
+
+    try {
+
+      if (
+        window.location.ancestorOrigins &&
+        window.location.ancestorOrigins.length
+      ) {
+
+        for (
+          let i = 0;
+          i < window.location.ancestorOrigins.length;
+          i++
+        ) {
+
+          origens.push(
+            window.location.ancestorOrigins[i]
+          );
+
+        }
+
+      }
+
+    } catch (erro) {
+
+      origens.push(
+        'Erro ao acessar ancestorOrigins: ' +
+        erro.message
+      );
+
+    }
+
+    document.getElementById('ancestors').textContent =
+      origens.length
+        ? origens.join(' → ')
+        : '(nenhuma origem disponível)';
+
+    try {
+
+      document.getElementById('top').textContent =
+        window.top === window
+          ? 'SIM'
+          : 'NÃO';
+
+    } catch (erro) {
+
+      document.getElementById('top').textContent =
+        'Bloqueado pelo navegador';
+
+    }
+
+    try {
+
+      document.getElementById('parent').textContent =
+        window.parent === window
+          ? 'SIM'
+          : 'NÃO';
+
+    } catch (erro) {
+
+      document.getElementById('parent').textContent =
+        'Bloqueado pelo navegador';
+
+    }
+
+  </script>
+
+</body>
+
+</html>
