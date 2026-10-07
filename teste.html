@@ -5,39 +5,58 @@
 
   <meta charset="UTF-8">
 
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Mensagem do Dia</title>
 
   <style>
 
-    * {
-      box-sizing: border-box;
-    }
-
     body {
-      margin: 0;
-      padding: 20px;
 
-      font-family: Georgia, "Times New Roman", serif;
+      margin: 0;
+      padding: 30px;
 
       background: transparent;
 
-      color: #333333;
+      text-align: center;
+
     }
 
     .container {
-
-      width: 100%;
 
       max-width: 900px;
 
       margin: 0 auto;
 
-      padding: 20px 25px 25px;
+    }
 
-      text-align: center;
+    .titulo {
+
+      font-family: Arial, sans-serif;
+
+      font-size: 18px;
+
+      font-weight: bold;
+
+      letter-spacing: 1px;
+
+      margin-bottom: 15px;
+
+    }
+
+    .linha {
+
+      width: 80px;
+
+      height: 1px;
+
+      background: #999;
+
+      margin: 0 auto 28px auto;
+
     }
 
     .imagem {
@@ -55,60 +74,65 @@
       margin: 0 auto 28px;
 
       border-radius: 8px;
+
     }
 
     .versiculo {
 
-      font-size: 26px;
+      font-family: Georgia, "Times New Roman", serif;
 
-      line-height: 1.55;
+      font-size: 27px;
 
-      color: #333333;
+      line-height: 1.5;
+
+      margin: 0 auto 20px;
+
     }
 
     .referencia {
 
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Arial, sans-serif;
 
-      font-size: 17px;
+      font-size: 18px;
 
-      font-weight: bold;
+      margin-bottom: 10px;
 
-      margin-top: 22px;
-
-      color: #555555;
     }
 
     .erro {
 
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Arial, sans-serif;
 
-      font-size: 16px;
+      font-size: 18px;
 
-      color: #777777;
+      color: #555;
+
     }
 
     @media (max-width: 600px) {
 
       body {
-        padding: 10px;
-      }
 
-      .container {
-        padding: 15px 10px 20px;
+        padding: 20px;
+
       }
 
       .imagem {
+
         max-width: 320px;
+
       }
 
       .versiculo {
-        font-size: 21px;
-        line-height: 1.5;
+
+        font-size: 22px;
+
       }
 
       .referencia {
-        font-size: 15px;
+
+        font-size: 16px;
+
       }
 
     }
@@ -122,23 +146,29 @@
 
   <div class="container">
 
+    <div class="titulo">
+      MENSAGEM DO DIA
+    </div>
+
+    <div class="linha"></div>
+
     <img
       id="imagem"
       class="imagem"
-      alt="Imagem da mensagem">
+      alt=""
+    >
 
     <div
       id="versiculo"
-      class="versiculo">
-
+      class="versiculo"
+    >
       Carregando...
-
     </div>
 
     <div
       id="referencia"
-      class="referencia">
-    </div>
+      class="referencia"
+    ></div>
 
   </div>
 
@@ -146,185 +176,226 @@
   <script>
 
     /*
-     * 1. Obtém a data enviada pela URL
+     * URL DO SEU APPS SCRIPT
      *
-     * Exemplo:
-     *
-     * ?data=20261006
-     */
-
-    const parametros =
-      new URLSearchParams(window.location.search);
-
-    const data =
-      parametros.get('data');
-
-
-    /*
-     * 2. Elementos da página
-     */
-
-    const versiculo =
-      document.getElementById('versiculo');
-
-    const referencia =
-      document.getElementById('referencia');
-
-    const imagem =
-      document.getElementById('imagem');
-
-
-    /*
-     * 3. URL do Apps Script
-     *
-     * COLOQUE AQUI A MESMA URL /exec
-     * QUE JÁ ESTÁ FUNCIONANDO.
+     * Mantenha aqui a mesma URL
+     * que você já está utilizando.
      */
 
     const API_URL =
-      'https://script.google.com/macros/s/AKfycbwKtla_Sv2EJim70wQD3TzHiMrG_TPanIDUgZHpsZBVVjTqVuCZ3yDj4b0yCPImY3S3/exec';
+      'COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT';
 
 
     /*
-     * 4. Converte o link do Google Drive
-     * em uma imagem exibível.
+     * Obtém o número do dia através
+     * do parâmetro ?dia=
+     *
+     * Exemplo:
+     *
+     * teste.html?dia=279
+     *
      */
 
-    function obterIdGoogleDrive(url) {
+    const parametros =
+      new URLSearchParams(
+        window.location.search
+      );
 
-      if (!url) {
-        return null;
-      }
-
-      let resultado =
-        url.match(/\/file\/d\/([^/]+)/);
-
-      if (resultado) {
-        return resultado[1];
-      }
-
-      resultado =
-        url.match(/[?&]id=([^&]+)/);
-
-      if (resultado) {
-        return resultado[1];
-      }
-
-      return null;
-    }
+    const dia =
+      parametros.get('dia');
 
 
     /*
-     * 5. Recebe os dados do Apps Script
+     * Elementos da página
      */
 
-    function receberVersiculo(dados) {
+    const versiculo =
+      document.getElementById(
+        'versiculo'
+      );
 
-      if (dados.sucesso) {
+    const referencia =
+      document.getElementById(
+        'referencia'
+      );
 
-        versiculo.textContent =
-          '“' + dados.versiculo + '”';
-
-        referencia.textContent =
-          dados.referencia;
-
-
-        if (dados.imagem) {
-
-          const idArquivo =
-            obterIdGoogleDrive(dados.imagem);
-
-          if (idArquivo) {
-
-            imagem.src =
-              'https://drive.google.com/thumbnail?id='
-              + idArquivo
-              + '&sz=w1000';
-
-            imagem.style.display =
-              'block';
-          }
-
-        }
-
-      } else {
-
-        versiculo.textContent =
-          dados.versiculo;
-
-        referencia.textContent = '';
-
-        imagem.style.display =
-          'none';
-      }
-
-    }
+    const imagem =
+      document.getElementById(
+        'imagem'
+      );
 
 
     /*
-     * 6. Verifica se recebemos uma data
+     * Verifica se o número do dia
+     * foi informado.
      */
 
-    if (!data) {
+    if (!dia) {
 
       versiculo.textContent =
-        'Nenhuma data foi informada.';
+        'Nenhum dia foi informado.';
 
-      referencia.textContent = '';
+    }
 
-    } else {
+
+    /*
+     * Verifica se o valor é um
+     * número válido entre 1 e 366.
+     */
+
+    else if (
+      !/^\d+$/.test(dia) ||
+      Number(dia) < 1 ||
+      Number(dia) > 366
+    ) {
+
+      versiculo.textContent =
+        'Número do dia inválido.';
+
+    }
+
+
+    /*
+     * Consulta o Apps Script.
+     */
+
+    else {
+
+      const script =
+        document.createElement(
+          'script'
+        );
 
 
       /*
-       * 7. Converte 20261006 para 06/10/2026
+       * Função que receberá
+       * o JSONP do Apps Script.
        */
 
-      if (!/^\d{8}$/.test(data)) {
+      window.receberVersiculo =
+        function(resultado) {
 
-        versiculo.textContent =
-          'Data inválida.';
-
-      } else {
-
-        const dataFormatada =
-          data.substring(6, 8)
-          + '/'
-          + data.substring(4, 6)
-          + '/'
-          + data.substring(0, 4);
-
-
-        /*
-         * 8. Chama o Apps Script
-         */
-
-        const script =
-          document.createElement('script');
-
-
-        script.src =
-          API_URL
-          + '?data='
-          + encodeURIComponent(dataFormatada)
-          + '&callback=receberVersiculo';
-
-
-        script.onerror =
-          function() {
+          if (!resultado.sucesso) {
 
             versiculo.textContent =
-              'Não foi possível carregar a mensagem.';
+              'Não há mensagem cadastrada para este dia.';
 
-            referencia.textContent = '';
+            referencia.textContent =
+              '';
 
-            imagem.style.display =
-              'none';
-          };
+            return;
+
+          }
 
 
-        document.body.appendChild(script);
+          /*
+           * Versículo
+           */
 
-      }
+          versiculo.textContent =
+            resultado.versiculo;
+
+
+          /*
+           * Referência
+           */
+
+          referencia.textContent =
+            resultado.referencia;
+
+
+          /*
+           * Imagem
+           */
+
+          if (resultado.imagem) {
+
+            let fileId = null;
+
+
+            /*
+             * Link no formato:
+             *
+             * drive.google.com/file/d/ID/view
+             */
+
+            const resultadoArquivo =
+              resultado.imagem.match(
+                /\/file\/d\/([^/]+)/
+              );
+
+
+            if (resultadoArquivo) {
+
+              fileId =
+                resultadoArquivo[1];
+
+            }
+
+
+            /*
+             * Link no formato:
+             *
+             * drive.google.com/open?id=ID
+             */
+
+            if (!fileId) {
+
+              const resultadoId =
+                resultado.imagem.match(
+                  /[?&]id=([^&]+)/
+                );
+
+
+              if (resultadoId) {
+
+                fileId =
+                  resultadoId[1];
+
+              }
+
+            }
+
+
+            /*
+             * Mostra a imagem.
+             */
+
+            if (fileId) {
+
+              imagem.src =
+                'https://drive.google.com/thumbnail?id='
+                + fileId
+                + '&sz=w1000';
+
+              imagem.style.display =
+                'block';
+
+            }
+
+          }
+
+        };
+
+
+      /*
+       * Chamada ao Apps Script.
+       *
+       * Exemplo:
+       *
+       * ?dia=279
+       */
+
+      script.src =
+        API_URL
+        + '?dia='
+        + encodeURIComponent(dia)
+        + '&callback=receberVersiculo';
+
+
+      document.body.appendChild(
+        script
+      );
 
     }
 
